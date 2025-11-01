@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVRental.BusinessObject.Shared.Models.QuanNH", "EVRental.BusinessObject.Shared.Models.QuanNH\EVRental.BusinessObject.Shared.Models.QuanNH.csproj", "{27C2A1FF-1C65-4976-899C-681B1ECF35AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVRental.CheckOutQuanNhs.Microservices.QuanNH", "EVRental.CheckOutQuanNhs.Microservices.QuanNH\EVRental.CheckOutQuanNhs.Microservices.QuanNH.csproj", "{437A7C49-9C61-480D-824A-4F6D614AEAD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVRental.ReturnCondition.Microservices.QuanNH", "EVRental.ReturnCondition.Microservices.QuanNH\EVRental.ReturnCondition.Microservices.QuanNH.csproj", "{9C929454-C8B2-499B-95F2-0319164DD117}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVRental.OcelotAPIGateway.QuanNH", "EVRental.OcelotAPIGateway.QuanNH\EVRental.OcelotAPIGateway.QuanNH.csproj", "{7EF6C817-F69C-4E83-ADC0-92EC036A4DDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVRental.MauiBlazorApp.QuanNH", "EVRental.MauiBlazorApp.QuanNH\EVRental.MauiBlazorApp.QuanNH.csproj", "{F06B9881-0000-4700-B25C-EDAF973E76D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27C2A1FF-1C65-4976-899C-681B1ECF35AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C2A1FF-1C65-4976-899C-681B1ECF35AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C2A1FF-1C65-4976-899C-681B1ECF35AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C2A1FF-1C65-4976-899C-681B1ECF35AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{437A7C49-9C61-480D-824A-4F6D614AEAD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{437A7C49-9C61-480D-824A-4F6D614AEAD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{437A7C49-9C61-480D-824A-4F6D614AEAD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{437A7C49-9C61-480D-824A-4F6D614AEAD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C929454-C8B2-499B-95F2-0319164DD117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C929454-C8B2-499B-95F2-0319164DD117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C929454-C8B2-499B-95F2-0319164DD117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C929454-C8B2-499B-95F2-0319164DD117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF6C817-F69C-4E83-ADC0-92EC036A4DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF6C817-F69C-4E83-ADC0-92EC036A4DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF6C817-F69C-4E83-ADC0-92EC036A4DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF6C817-F69C-4E83-ADC0-92EC036A4DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F06B9881-0000-4700-B25C-EDAF973E76D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F06B9881-0000-4700-B25C-EDAF973E76D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F06B9881-0000-4700-B25C-EDAF973E76D3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F06B9881-0000-4700-B25C-EDAF973E76D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F06B9881-0000-4700-B25C-EDAF973E76D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F06B9881-0000-4700-B25C-EDAF973E76D3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {279AAA7C-0301-4FDC-A329-B36965CDD461}
+	EndGlobalSection
+EndGlobal

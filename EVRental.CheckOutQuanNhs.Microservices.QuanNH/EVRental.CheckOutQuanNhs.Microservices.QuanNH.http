@@ -1,0 +1,6 @@
+@EVRental.CheckOutQuanNhs.Microservices.QuanNH_HostAddress = http://localhost:5041
+
+GET {{EVRental.CheckOutQuanNhs.Microservices.QuanNH_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

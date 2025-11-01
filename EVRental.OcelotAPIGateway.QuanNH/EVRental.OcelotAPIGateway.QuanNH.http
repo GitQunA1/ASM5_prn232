@@ -1,0 +1,6 @@
+@EVRental.OcelotAPIGateway.QuanNH_HostAddress = http://localhost:5033
+
+GET {{EVRental.OcelotAPIGateway.QuanNH_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
