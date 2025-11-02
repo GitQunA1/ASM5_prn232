@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EVRental.BusinessObject.Shared.Models.QuanNH;
 
@@ -35,5 +36,6 @@ public partial class CheckOutQuanNh
 
     public int? ReturnConditionId { get; set; }
 
-    public virtual ReturnCondition ReturnCondition { get; set; }
+    [JsonIgnore]
+    public virtual ReturnCondition? ReturnCondition { get; set; }
 }

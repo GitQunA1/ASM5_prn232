@@ -16,7 +16,7 @@ namespace EVRental.ReturnCondition.Microservices.QuanNH.Consumer
             var receiveData = context.Message;
 
             var receiveDataJsonString = JsonSerializer.Serialize(receiveData);
-            var messageLog = string.Format("{0} *** RECEIVE *** data from CheckOutQuanNhQueue on RabbitMQ", DateTime.Now, receiveDataJsonString);
+            var messageLog = $"{DateTime.Now:O} *** RECEIVE *** data from CheckOutQuanNhQueue on RabbitMQ :: {receiveDataJsonString}";
             _logger.LogInformation(messageLog);
 
         }

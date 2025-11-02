@@ -68,7 +68,7 @@ namespace EVRental.CheckOutQuanNhs.Microservices.QuanNH.Controllers
             await endpoint.Send(checkOutQuanNh);
 
             var checkOutJsonString = JsonSerializer.Serialize(checkOutQuanNh);
-            string messageLog = string.Format("{0} *** PUBLISH *** data (order json string) into CheckOutQuanNhQueue on RabbitMQ", DateTime.Now, checkOutJsonString);
+            string messageLog = $"{DateTime.Now:O} *** PUBLISH *** data into CheckOutQuanNhQueue on RabbitMQ :: {checkOutJsonString}";
             _logger.LogInformation(messageLog);
 
             return Ok();

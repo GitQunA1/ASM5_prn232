@@ -10,16 +10,15 @@ builder.Host.ConfigureLogging(logging =>
 
 builder.Services.AddMassTransit(x =>
 {
-    ////  VuLNS | Creates a new Service Bus using RabbitMQ, pass paramteres like the host url, username and password.
-    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+    ////  VuLNS | Creates a new Service Bus using RabbitMQ, pass parameters like the host url, username and password.
+    x.UsingRabbitMq((context, cfg) =>
     {
-        //config.Host(new Uri("rabbitmq://localhost:XXXX"), h =>
-        config.Host(new Uri("rabbitmq://localhost"), h =>
+        cfg.Host("localhost", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
         });
-    }));
+    });
 });
 
 // Add services to the container.

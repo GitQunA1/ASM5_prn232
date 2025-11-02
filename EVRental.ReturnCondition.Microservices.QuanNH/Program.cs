@@ -12,21 +12,22 @@ builder.Host.ConfigureLogging(logging =>
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<CheckOutQuanNhMicroserviceConsumer>();
-    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+    x.UsingRabbitMq((context, cfg) =>
     {
-        //cfg.Host(new Uri("rabbitmq://localhost:xxxx"), h =>
-        cfg.Host(new Uri("rabbitmq://localhost"), h =>
+        //cfg.Host("localhost", "virtualHost", h =>
+        cfg.Host("localhost", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
         });
+
         cfg.ReceiveEndpoint("CheckOutQuanNhQueue", ep =>
         {
             ep.PrefetchCount = 16;
             ep.UseMessageRetry(r => r.Interval(2, 100));
-            ep.ConfigureConsumer<CheckOutQuanNhMicroserviceConsumer>(provider);
+            ep.ConfigureConsumer<CheckOutQuanNhMicroserviceConsumer>(context);
         });
-    }));
+    });
 });
 
 // Add services to the container.
