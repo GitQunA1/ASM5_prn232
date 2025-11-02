@@ -1,0 +1,229 @@
+@page "/checkout"
+@inject HttpClient Http
+
+<h1 class="mb-3">Publish Check-Out</h1>
+<p class="text-muted">Điền thông tin bên dưới và gửi để đẩy thông điệp lên RabbitMQ thông qua API Gateway.</p>
+
+<EditForm EditContext="@editContext" OnValidSubmit="SubmitAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="checkOutId">Check-Out ID</label>
+            <InputNumber id="checkOutId" class="form-control" @bind-Value="formModel.CheckOutQuanNhid" />
+        </div>
+        <div class="form-group">
+            <label for="checkOutTime">Check-Out Time</label>
+            <InputDate id="checkOutTime" class="form-control" @bind-Value="formModel.CheckOutTime" />
+        </div>
+        <div class="form-group">
+            <label for="returnDate">Return Date</label>
+            <InputDate id="returnDate" class="form-control" @bind-Value="formModel.ReturnDate" />
+        </div>
+        <div class="form-group">
+            <label for="extraCost">Extra Cost</label>
+            <InputNumber id="extraCost" class="form-control" @bind-Value="formModel.ExtraCost" />
+        </div>
+        <div class="form-group">
+            <label for="totalCost">Total Cost</label>
+            <InputNumber id="totalCost" class="form-control" @bind-Value="formModel.TotalCost" />
+        </div>
+        <div class="form-group">
+            <label for="lateFee">Late Fee</label>
+            <InputNumber id="lateFee" class="form-control" @bind-Value="formModel.LateFee" />
+        </div>
+        <div class="form-group span-2">
+            <label for="notes">Notes</label>
+            <InputTextArea id="notes" class="form-control" @bind-Value="formModel.Notes" rows="3" />
+        </div>
+        <div class="form-group span-2">
+            <label for="feedback">Customer Feedback</label>
+            <InputTextArea id="feedback" class="form-control" @bind-Value="formModel.CustomerFeedback" rows="3" />
+        </div>
+        <div class="form-group">
+            <label for="payment">Payment Method</label>
+            <InputText id="payment" class="form-control" @bind-Value="formModel.PaymentMethod" />
+        </div>
+        <div class="form-group">
+            <label for="staffSignature">Staff Signature</label>
+            <InputText id="staffSignature" class="form-control" @bind-Value="formModel.StaffSignature" />
+        </div>
+        <div class="form-group">
+            <label for="customerSignature">Customer Signature</label>
+            <InputText id="customerSignature" class="form-control" @bind-Value="formModel.CustomerSignature" />
+        </div>
+        <div class="form-group">
+            <label for="returnCondition">Return Condition Id</label>
+            <InputNumber id="returnCondition" class="form-control" @bind-Value="formModel.ReturnConditionId" />
+        </div>
+        <div class="form-group checkbox-group">
+            <InputCheckbox id="isPaid" class="form-check-input" @bind-Value="formModel.IsPaid" />
+            <label class="form-check-label" for="isPaid">Is Paid</label>
+        </div>
+        <div class="form-group checkbox-group">
+            <InputCheckbox id="isDamage" class="form-check-input" @bind-Value="formModel.IsDamageReported" />
+            <label class="form-check-label" for="isDamage">Damage Reported</label>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-primary" type="submit" disabled="@isSubmitting">
+            @(isSubmitting ? "Đang gửi..." : "Gửi lên RabbitMQ")
+        </button>
+        <button class="btn btn-outline-secondary ms-2" type="button" @onclick="ResetForm" disabled="@isSubmitting">
+            Làm mới
+        </button>
+    </div>
+</EditForm>
+
+@if (!string.IsNullOrWhiteSpace(statusMessage))
+{
+    <div class="alert @statusCssClass mt-3" role="alert">
+        @statusMessage
+    </div>
+}
+
+@code {
+    private readonly JsonSerializerOptions serializerOptions = new(JsonSerializerDefaults.Web);
+    private CheckOutFormModel formModel = new();
+    private EditContext? editContext;
+    private bool isSubmitting;
+    private string? statusMessage;
+    private string statusCssClass = "alert-info";
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(formModel);
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (editContext is null)
+        {
+            return;
+        }
+
+        isSubmitting = true;
+        statusMessage = null;
+        statusCssClass = "alert-info";
+
+        try
+        {
+            var payload = new CheckOutQueueRequest
+            {
+                CheckOutQuanNhid = formModel.CheckOutQuanNhid,
+                CheckOutTime = formModel.CheckOutTime ?? DateTime.Now,
+                ReturnDate = (formModel.ReturnDate ?? DateTime.Now).ToString("yyyy-MM-dd"),
+                ExtraCost = formModel.ExtraCost,
+                TotalCost = formModel.TotalCost,
+                LateFee = formModel.LateFee,
+                IsPaid = formModel.IsPaid,
+                IsDamageReported = formModel.IsDamageReported,
+                Notes = formModel.Notes,
+                CustomerFeedback = formModel.CustomerFeedback,
+                PaymentMethod = formModel.PaymentMethod,
+                StaffSignature = formModel.StaffSignature,
+                CustomerSignature = formModel.CustomerSignature,
+                ReturnConditionId = formModel.ReturnConditionId
+            };
+
+            var json = JsonSerializer.Serialize(payload, serializerOptions);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await Http.PostAsync("gateway/CheckOutQuanNh", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                statusCssClass = "alert-success";
+                statusMessage = "Đã gửi thông điệp thành công. Kiểm tra console của các microservice và RabbitMQ để xác nhận.";
+            }
+            else
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                statusCssClass = "alert-danger";
+                statusMessage = $"Gửi thất bại ({(int)response.StatusCode} {response.ReasonPhrase}). Phản hồi: {errorBody}";
+            }
+        }
+        catch (Exception ex)
+        {
+            statusCssClass = "alert-danger";
+            statusMessage = $"Lỗi không mong muốn: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void ResetForm()
+    {
+        formModel = new CheckOutFormModel();
+        editContext = new EditContext(formModel);
+        statusMessage = null;
+        statusCssClass = "alert-info";
+    }
+
+    private sealed class CheckOutFormModel
+    {
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Check-Out ID phải lớn hơn 0")]
+        public int CheckOutQuanNhid { get; set; } = 2;
+
+        [Required]
+        public DateTime? CheckOutTime { get; set; } = DateTime.Now;
+
+        [Required]
+        public DateTime? ReturnDate { get; set; } = DateTime.Now.AddDays(3);
+
+        [Range(0, 1_000_000)]
+        public decimal ExtraCost { get; set; } = 20m;
+
+        [Required]
+        [Range(0, 1_000_000)]
+        public decimal TotalCost { get; set; } = 250m;
+
+        [Range(0, 1_000_000)]
+        public decimal LateFee { get; set; } = 0m;
+
+        public bool IsPaid { get; set; } = true;
+
+        public bool IsDamageReported { get; set; }
+
+        [MaxLength(200)]
+        public string Notes { get; set; } = "Test message via Ocelot Gateway";
+
+        [MaxLength(200)]
+        public string CustomerFeedback { get; set; } = "Excellent service!";
+
+        [MaxLength(50)]
+        public string PaymentMethod { get; set; } = "Credit Card";
+
+        [MaxLength(50)]
+        public string StaffSignature { get; set; } = "John Doe";
+
+        [MaxLength(50)]
+        public string CustomerSignature { get; set; } = "Jane Smith";
+
+        [Required]
+        [Range(1, int.MaxValue)]
+        public int ReturnConditionId { get; set; } = 1;
+    }
+
+    private sealed class CheckOutQueueRequest
+    {
+        public int CheckOutQuanNhid { get; set; }
+        public DateTime CheckOutTime { get; set; }
+        public string? ReturnDate { get; set; }
+        public decimal ExtraCost { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal LateFee { get; set; }
+        public bool IsPaid { get; set; }
+        public bool IsDamageReported { get; set; }
+        public string? Notes { get; set; }
+        public string? CustomerFeedback { get; set; }
+        public string? PaymentMethod { get; set; }
+        public string? StaffSignature { get; set; }
+        public string? CustomerSignature { get; set; }
+        public int ReturnConditionId { get; set; }
+    }
+}
