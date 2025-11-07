@@ -104,7 +104,6 @@ StyleCopReport.xml
 *.vsp
 *.vspx
 *.sap
-*.sql
 *.cache
 *.docstates
 
